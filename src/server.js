@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 8000;
 // Express App Settings
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_URL || "http://localhost:3000",
         methods: "GET,POST,PUT,PATCH,DELETE",
         allowedHeaders: "Content-Type,Authorization",
         credentials: true,

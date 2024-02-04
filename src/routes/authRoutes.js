@@ -19,7 +19,7 @@ router.get(
     }),
     function (req, res) {
         res.cookie("jwt", req.user.token, { httpOnly: true });
-        res.redirect("http://localhost:3000");
+        res.redirect(process.env.CLIENT_URL || "http://localhost:3000");
     }
 );
 
@@ -37,6 +37,9 @@ router.post(
     authController.loginValidationRules,
     authController.login
 );
+
+//user password reset
+router.post("/resetpassword", authController.resetPassword);
 
 // user logout
 router.post("/logout", authenticateToken, authController.logout);
