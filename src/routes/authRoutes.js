@@ -18,7 +18,7 @@ router.get(
         session: false,
     }),
     function (req, res) {
-        res.cookie("jwt", req.user.token, { httpOnly: true, secure: true});
+        res.cookie("jwt", req.user.token, { httpOnly: true, sameSite: 'None', secure: true});
         res.redirect(process.env.CLIENT_URL || "http://localhost:3000");
     }
 );
