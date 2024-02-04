@@ -103,7 +103,7 @@ const saveOrUpdateOAuthToken = (
 };
 
 exports.googleSendToken = (req, res) => {
-    res.cookie("jwt", req.user.token, { httpOnly: true });
+    res.cookie("jwt", req.user.token, { httpOnly: true, secure: true  });
     res.redirect(process.env.CLIENT_URL || "http://localhost:3000");
 };
 
@@ -170,7 +170,7 @@ exports.register = async (req, res) => {
         );
 
         // set HTTP-only cookie
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600000 }); // 1 hour
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600000 }); // 1 hour
 
         // send response
         res.sendSuccess(
@@ -233,7 +233,7 @@ exports.login = async (req, res) => {
         const hasLease = leaseCheckResult[0].hasLease;
 
         // set HTTP-only cookie
-        res.cookie("jwt", token, { httpOnly: true, maxAge: 3600000 }); // 1 hour
+        res.cookie("jwt", token, { httpOnly: true, secure: true, maxAge: 3600000 }); // 1 hour
 
         // send response
         res.sendSuccess(
@@ -253,7 +253,7 @@ exports.login = async (req, res) => {
 
 // user logout
 exports.logout = (req, res) => {
-    res.clearCookie("jwt");
+    res.clearCookie("jwt", { httpOnly: true, secure: true });
     res.sendSuccess(null, "User logged out successfully");
 };
 
