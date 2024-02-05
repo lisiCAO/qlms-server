@@ -152,7 +152,7 @@ exports.register = async (req, res) => {
         const accessToken = jwt.sign(
             { userId: newUser.id, role: newUser.role },
             process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            { expiresIn: "3h" }
         );
         const refreshToken = jwt.sign(
             { userId: newUser.id },
@@ -170,7 +170,7 @@ exports.register = async (req, res) => {
         );
 
         // set HTTP-only cookie
-        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 3600000 }); // 1 hour
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 36000000 }); // 1 hour
 
         // send response
         res.sendSuccess(
@@ -233,7 +233,7 @@ exports.login = async (req, res) => {
         const hasLease = leaseCheckResult[0].hasLease;
 
         // set HTTP-only cookie
-        res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 3600000 }); // 1 hour
+        res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 36000000 }); // 1 hour
 
         // send response
         res.sendSuccess(
