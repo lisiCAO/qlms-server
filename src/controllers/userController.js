@@ -1,6 +1,7 @@
 const userService = require("../services/userService");
 const { body, validationResult } = require("express-validator");
 const { user } = require("../models/index");
+const { sequelize, Sequelize } = require("../models/index");
 const multer = require("multer");
 
 // Validate and sanitize fields using express-validator
@@ -128,6 +129,13 @@ exports.getUserInfo = async (req, res) => {
 
         let userInfo = {};
 
+        // check if user has a lease
+        const leaseCheckSql = `SELECT EXISTS(SELECT 1 FROM lease WHERE tenant_user_id = ${req.user.userId}) AS hasLease;`;
+        const leaseCheckResult = await sequelize.query(leaseCheckSql, {
+            type: Sequelize.QueryTypes.SELECT,
+        });
+        const hasLease = leaseCheckResult[0].hasLease;
+
         if (userdata.role === "tenant") {
             userInfo = {
                 id: userdata.id,
@@ -153,6 +161,7 @@ exports.getUserInfo = async (req, res) => {
                 is_verified: userdata.is_verified,
                 createdAt: userdata.createdAt,
                 updatedAt: userdata.updatedAt,
+                hasLease: hasLease,
             };
         } else if (userdata.role === "landlord") {
             userInfo = {
@@ -172,6 +181,7 @@ exports.getUserInfo = async (req, res) => {
                 date_of_birth: userdata.date_of_birth,
                 createdAt: userdata.createdAt,
                 updatedAt: userdata.updatedAt,
+                hasLease: hasLease,
             };
         }
 
